@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a node
+struct a {
+    int data;
+    struct a *next ;
+};
+
+// Initialize the head pointer to NULL
+struct a *head = NULL;
+
+// Function to insert a node into the linked list
+void insert(int data) {
+    if (head == NULL) {
+        // Create the first node when the list is empty
+        head = (struct a *)malloc(sizeof(struct a));
+        head->data = data;
+        head->next = NULL;
+    } else {
+        // Traverse to the end of the list and insert the new node
+        struct a *tmp = head;
+        while (tmp->next != NULL) {
+            tmp = tmp->next;
+        }
+        tmp->next = (struct a *)malloc(sizeof(struct a));
+        tmp->next->data = data;
+        tmp->next->next = NULL;
+    }
+}
+
+// Function to delete a node from the linked list
+void delete(int data) {
+    struct a *tmp = head;
+    struct a *prev = NULL;
+
+    // Case 1: Deleting the head node
+    if (tmp != NULL && tmp->data == data) {
+        head = tmp->next;  // Update head to the next node
+        free(tmp);         // Free the memory of the deleted head node
+        return;
+    }
+
+    // Case 2: Deleting a non-head node
+    while (tmp != NULL && tmp->data != data) {
+        prev = tmp;        // Keep track of the previous node
+        tmp = tmp->next;   // Move to the next node
+    }
+
+    // If node with the data is not found
+    if (tmp == NULL) {
+        printf("Node with data %d not found.\n", data);
+        return;
+    }
+
+    // Unlink the node from the list
+    prev->next = tmp->next;
+
+    // Free memory of the node to be deleted
+    free(tmp);
+}
+
+// Function to print the contents of the linked list
+void printList() {
+    struct a *tmp = head;
+    while (tmp != NULL) {
+        printf("%d", tmp->data);  // Print the data of each node
+        if (tmp->next) printf("->");
+        tmp = tmp->next;
+    }
+    printf("->NULL\n");  // Indicate the end of the list
+}
+
+int main() {
+    // Insert data into the linked list
+    insert(10);
+    insert(20);
+    insert(30);
+
+    // Print the linked list before deletion
+    printf("List before deletion:\n");
+    printList();  // Output: 10->20->30->NULL
+    
+    // Delete node with value 10 (head node)
+    delete(300);
+
+    // Print the linked list after deletion
+    printf("List after deletion:\n");
+    printList();  // Output: 20->30->NULL
+    
+    return 0;
+}
+

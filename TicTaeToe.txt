@@ -1,0 +1,119 @@
+#include <stdio.h>
+#define SIZE 4 
+
+char board[SIZE][SIZE];
+
+void initialization();
+void printBoard();
+int checkRow(char icon, int row);
+int checkColumn(char icon, int col);
+int checkLeftDiagonal(char icon);
+int checkRightDiagonal(char icon);
+int checkWinner(char icon, int row,int col);
+
+int main(){
+    int flag=0,row=0, col=0, count=0;
+    
+    initialization();
+    printBoard();
+
+    char playerName[2][20];
+    char playerIcon[2]={'X','O'};
+    
+    printf("Enter the 1st Player name: ");
+    scanf("%s",playerName[0]);
+    
+    printf("Enter the 2nd Player name: ");
+    scanf("%s",playerName[1]);
+    
+    while(count<9){
+        char icon = playerIcon[flag];
+        printf("%s Enter your position : ", playerName[flag]);
+        scanf("%d %d", &row, &col);
+        if(row < 0 || col <0 || row > 9 || col >9 || board[row][col] != '-'){
+            printf("Invalid Move !!");
+            continue;
+        }
+        board[row][col] = icon;
+        count++;
+        printBoard();
+
+        if (checkWinner(icon, row, col)) {
+            printf("\n%s is the WINNER!\n", playerName[flag]);
+            return 0;
+        }
+
+        flag = 1 - flag; 
+    }
+    printf("\nGame Over! It's a draw.\n");
+    return 0;
+}
+void initialization(){
+    for(int i=1;i<SIZE;i++){
+     for(int j=1;j<SIZE;j++){
+        board[i][j] = '-';
+     }   
+    }
+}
+
+void printBoard(){
+    printf("\n");
+    for(int i=1;i<SIZE;i++){
+     for(int j=1;j<SIZE;j++){
+        printf(" %c ", board[i][j]);
+     }   
+     printf("\n");
+    }
+}
+
+// Check if a player has won
+int checkWinner(char icon, int row, int col) {
+    return checkRow(icon, row) || checkColumn(icon, col) || checkLeftDiagonal(icon) || checkRightDiagonal(icon);
+}
+
+// Check row
+int checkRow(char icon, int row) {
+    for (int j = 1; j < SIZE; j++) {
+        if (board[row][j] != icon) return 0;
+    }
+    return 1;
+}
+
+// Check column
+int checkColumn(char icon, int col) {
+    for (int i = 1; i < SIZE; i++) {
+        if (board[i][col] != icon) return 0;
+    }
+    return 1;
+}
+
+// Check left diagonal
+int checkLeftDiagonal(char icon) {
+    for (int i = 1; i < SIZE; i++) {
+        if (board[i][i] != icon) return 0;
+    }
+    return 1;
+}
+
+// Check right diagonal
+int checkRightDiagonal(char icon) {
+    int j=SIZE-1;
+    for (int i = 1; i < SIZE; i++) {
+        if (board[i][j] != icon) return 0;
+        j--;
+    }
+    return 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
